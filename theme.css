@@ -1,0 +1,860 @@
+/*
+ * ═══════════════════════════════════════════════════════════════
+ *   PaperK — tema para Obsidian
+ *   Papel antigo, pergaminho e tinta sépia.
+ *   Claro: "Pergaminho"  ·  Escuro: "Couro & Vela"
+ *
+ *   Autor: Miqueias Klippel — https://github.com/miqueiasklippel
+ *   Versão: 1.0.0  ·  Licença: MIT
+ *
+ *   Fontes recomendadas (todas livres, licença SIL OFL — instale
+ *   no sistema; o tema não baixa nada da internet):
+ *     • Cinzel ................. títulos principais (H1, H2, H4)
+ *     • Cormorant Garamond ..... subtítulos e citações (itálico)
+ *     • EB Garamond ............ texto corrido
+ *     • Courier Prime .......... código (estilo máquina de escrever)
+ *   Sem elas, o tema recorre a Palatino, Book Antiqua, Georgia etc.
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* @settings
+name: PaperK
+id: paperk
+settings:
+    -
+        id: paperk-aparencia
+        title: Aparência do papel
+        type: heading
+        level: 2
+        collapsed: false
+    -
+        id: paperk-no-texture
+        title: Desativar a textura de papel
+        description: Remove o grão sutil do pergaminho na área das notas.
+        type: class-toggle
+        default: false
+    -
+        id: paperk-no-vignette
+        title: Desativar o escurecimento das bordas
+        description: Remove a vinheta que imita as bordas envelhecidas do papel.
+        type: class-toggle
+        default: false
+    -
+        id: paperk-no-ornaments
+        title: Desativar os ornamentos
+        description: Remove o florão sob o H1, as aspas decorativas e a linha horizontal ornamental.
+        type: class-toggle
+        default: false
+    -
+        id: paperk-no-drop-cap
+        title: Desativar a letra capitular
+        description: Remove a capitular do primeiro parágrafo após um título H1 (modo de leitura).
+        type: class-toggle
+        default: false
+    -
+        id: paperk-left-h1
+        title: Alinhar o H1 à esquerda
+        description: Por padrão o H1 é centralizado, como o título de um manuscrito.
+        type: class-toggle
+        default: false
+    -
+        id: paperk-sepia-images
+        title: Imagens em tom sépia
+        description: Aplica um leve filtro sépia às imagens incorporadas.
+        type: class-toggle
+        default: false
+    -
+        id: paperk-sans-interface
+        title: Interface em fonte sem serifa
+        description: Mantém a serifa nas notas, mas usa a fonte do sistema nos menus e painéis.
+        type: class-toggle
+        default: false
+    -
+        id: paperk-fontes
+        title: Fontes
+        type: heading
+        level: 2
+        collapsed: true
+    -
+        id: paperk-font-heading
+        title: Fonte dos títulos (H1, H2, H4, título da nota)
+        type: variable-text
+        default: '"Cinzel", "Cormorant SC", "Trajan Pro", "Perpetua Titling MT", "Copperplate", "Book Antiqua", "Palatino Linotype", Georgia, serif'
+    -
+        id: paperk-font-subtitle
+        title: Fonte dos subtítulos e citações (H3, H5, citações)
+        type: variable-text
+        default: '"Cormorant Garamond", "Cormorant", "EB Garamond", "Garamond", "Palatino Linotype", "Book Antiqua", Georgia, serif'
+    -
+        id: paperk-font-body
+        title: Fonte do texto
+        type: variable-text
+        default: '"EB Garamond", "Cormorant Garamond", "Crimson Pro", "Libre Baskerville", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif'
+    -
+        id: paperk-font-mono
+        title: Fonte do código
+        type: variable-text
+        default: '"Courier Prime", "IBM Plex Mono", "Courier New", "Liberation Mono", monospace'
+*/
+
+/* ───────────────────────────────────────────────────────────────
+   1. FONTES E MEDIDAS (comuns aos dois modos)
+   ─────────────────────────────────────────────────────────────── */
+body {
+  --paperk-font-heading: "Cinzel", "Cormorant SC", "Trajan Pro", "Perpetua Titling MT", "Copperplate", "Book Antiqua", "Palatino Linotype", Georgia, serif;
+  --paperk-font-subtitle: "Cormorant Garamond", "Cormorant", "EB Garamond", "Garamond", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --paperk-font-body: "EB Garamond", "Cormorant Garamond", "Crimson Pro", "Libre Baskerville", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  --paperk-font-mono: "Courier Prime", "IBM Plex Mono", "Courier New", "Liberation Mono", monospace;
+  --paperk-font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", "Ubuntu", "Cantarell", "Noto Sans", sans-serif;
+
+  --font-text-theme: var(--paperk-font-body);
+  --font-interface-theme: var(--paperk-font-body);
+  --font-monospace-theme: var(--paperk-font-mono);
+
+  --line-height-normal: 1.68;
+  --line-height-tight: 1.3;
+  --file-line-width: 46rem;
+  --p-spacing: 1.1rem;
+
+  /* Títulos */
+  --h1-font: var(--paperk-font-heading);
+  --h1-size: 2.05em;
+  --h1-weight: 600;
+  --h1-line-height: 1.25;
+  --h1-letter-spacing: 0.045em;
+  --h1-variant: small-caps;
+  --h1-style: normal;
+
+  --h2-font: var(--paperk-font-heading);
+  --h2-size: 1.55em;
+  --h2-weight: 500;
+  --h2-line-height: 1.3;
+  --h2-letter-spacing: 0.035em;
+  --h2-variant: small-caps;
+  --h2-style: normal;
+
+  --h3-font: var(--paperk-font-subtitle);
+  --h3-size: 1.42em;
+  --h3-weight: 600;
+  --h3-line-height: 1.3;
+  --h3-letter-spacing: 0.01em;
+  --h3-variant: normal;
+  --h3-style: italic;
+
+  --h4-font: var(--paperk-font-heading);
+  --h4-size: 1.08em;
+  --h4-weight: 600;
+  --h4-line-height: 1.4;
+  --h4-letter-spacing: 0.12em;
+  --h4-variant: small-caps;
+  --h4-style: normal;
+
+  --h5-font: var(--paperk-font-subtitle);
+  --h5-size: 1.12em;
+  --h5-weight: 600;
+  --h5-line-height: 1.4;
+  --h5-letter-spacing: 0.02em;
+  --h5-variant: normal;
+  --h5-style: italic;
+
+  --h6-font: var(--paperk-font-body);
+  --h6-size: 0.95em;
+  --h6-weight: 600;
+  --h6-line-height: 1.4;
+  --h6-letter-spacing: 0.14em;
+  --h6-variant: small-caps;
+  --h6-style: normal;
+
+  --inline-title-font: var(--paperk-font-heading);
+  --inline-title-size: 2.3em;
+  --inline-title-weight: 600;
+  --inline-title-line-height: 1.2;
+  --inline-title-variant: small-caps;
+  --inline-title-style: normal;
+
+  /* Formas */
+  --radius-s: 2px;
+  --radius-m: 4px;
+  --radius-l: 6px;
+  --radius-xl: 8px;
+  --checkbox-radius: 2px;
+  --tag-radius: 3px;
+  --tag-border-width: 1px;
+  --tag-padding-x: 0.5em;
+  --tag-padding-y: 0.12em;
+  --blockquote-border-thickness: 2px;
+  --blockquote-font-style: italic;
+  --callout-radius: 3px;
+  --callout-border-width: 0 0 0 3px;
+  --callout-border-opacity: 0.85;
+  --callout-padding: 14px 18px 14px 20px;
+  --callout-title-weight: 600;
+  --hr-thickness: 1px;
+  --code-radius: 3px;
+  --embed-border-start: 2px solid var(--paperk-gilt);
+}
+
+/* Interface sem serifa (opcional) */
+body.paperk-sans-interface {
+  --font-interface-theme: var(--paperk-font-sans);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   2. MODO CLARO — "Pergaminho"
+   Papel creme, tinta sépia, lacre cor de vinho e filetes dourados.
+   ─────────────────────────────────────────────────────────────── */
+.theme-light {
+  /* Paleta própria */
+  --paperk-paper: #f4ead4;
+  --paperk-paper-deep: #ebdfc3;
+  --paperk-ink: #3a2a1b;
+  --paperk-wax: #8a2c23;          /* lacre / vinho */
+  --paperk-wax-soft: #a34a3c;
+  --paperk-gilt: #9a7328;         /* dourado envelhecido */
+  --paperk-gilt-soft: #c4a462;
+  --paperk-sepia: #7a4b2a;
+  --paperk-indigo: #2f4a6b;       /* tinta ferrogálica azulada */
+  --paperk-vignette: rgba(120, 82, 38, 0.16);
+  --paperk-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.29 0 0 0 0 0.13 0.55 0 0 0 -0.18'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* Destaque (acento) em matiz de lacre */
+  --accent-h: 6;
+  --accent-s: 59%;
+  --accent-l: 34%;
+
+  /* Escala de base */
+  --color-base-00: #f6eedb;
+  --color-base-05: #f1e6cd;
+  --color-base-10: #ece0c4;
+  --color-base-20: #e6d8b8;
+  --color-base-25: #dfcfab;
+  --color-base-30: #d4c29a;
+  --color-base-35: #c9b58b;
+  --color-base-40: #b8a27a;
+  --color-base-50: #9c8463;
+  --color-base-60: #7f6849;
+  --color-base-70: #6b543a;
+  --color-base-100: #2e2015;
+
+  /* Cores nomeadas (usadas em callouts, gráficos e destaques) */
+  --color-red-rgb: 139, 46, 36;      --color-red: #8b2e24;
+  --color-orange-rgb: 168, 96, 40;   --color-orange: #a86028;
+  --color-yellow-rgb: 160, 120, 40;  --color-yellow: #a07828;
+  --color-green-rgb: 84, 104, 50;    --color-green: #546832;
+  --color-cyan-rgb: 46, 104, 102;    --color-cyan: #2e6866;
+  --color-blue-rgb: 47, 74, 107;     --color-blue: #2f4a6b;
+  --color-purple-rgb: 102, 70, 108;  --color-purple: #66466c;
+  --color-pink-rgb: 146, 66, 88;     --color-pink: #924258;
+
+  /* Fundos */
+  --background-primary: var(--paperk-paper);
+  --background-primary-alt: #ede1c6;
+  --background-secondary: #e8dbbd;
+  --background-secondary-alt: #e1d2b0;
+  --background-modifier-border: #d3c19c;
+  --background-modifier-border-hover: #c2ab80;
+  --background-modifier-border-focus: var(--paperk-gilt);
+  --background-modifier-hover: rgba(122, 75, 42, 0.08);
+  --background-modifier-active-hover: rgba(138, 44, 35, 0.12);
+  --background-modifier-form-field: #f8f1e1;
+  --background-modifier-error: #8b2e24;
+  --background-modifier-success: #546832;
+
+  /* Texto */
+  --text-normal: var(--paperk-ink);
+  --text-muted: #6b543a;
+  --text-faint: #957c5c;
+  --text-on-accent: #f8f1e1;
+  --text-accent: var(--paperk-wax);
+  --text-accent-hover: #6f2018;
+  --text-selection: rgba(138, 44, 35, 0.17);
+  --text-highlight-bg: rgba(214, 170, 72, 0.38);
+  --text-error: #8b2e24;
+  --text-success: #546832;
+  --text-warning: #a86028;
+
+  --bold-color: #24180e;
+  --italic-color: #4a3523;
+
+  /* Títulos */
+  --h1-color: var(--paperk-wax);
+  --h2-color: var(--paperk-ink);
+  --h3-color: var(--paperk-sepia);
+  --h4-color: #84611f;
+  --h5-color: var(--paperk-sepia);
+  --h6-color: var(--text-muted);
+  --inline-title-color: var(--paperk-wax);
+
+  /* Links e etiquetas */
+  --link-color: var(--paperk-wax);
+  --link-color-hover: #6f2018;
+  --link-unresolved-color: var(--paperk-wax-soft);
+  --link-unresolved-opacity: 0.65;
+  --link-external-color: var(--paperk-indigo);
+  --link-external-color-hover: #1f3550;
+  --tag-color: #7c5a1c;
+  --tag-color-hover: #5e4313;
+  --tag-background: rgba(154, 115, 40, 0.09);
+  --tag-background-hover: rgba(154, 115, 40, 0.17);
+  --tag-border-color: rgba(154, 115, 40, 0.42);
+  --tag-border-color-hover: rgba(154, 115, 40, 0.65);
+
+  /* Elementos interativos */
+  --interactive-normal: #ece0c4;
+  --interactive-hover: #e3d4b3;
+  --interactive-accent: var(--paperk-wax);
+  --interactive-accent-hover: #6f2018;
+  --checkbox-color: var(--paperk-wax);
+  --checkbox-color-hover: #6f2018;
+  --checkbox-border-color: #a8916c;
+  --checkbox-border-color-hover: var(--paperk-wax);
+  --checkbox-marker-color: #f8f1e1;
+  --checklist-done-color: var(--text-faint);
+  --checklist-done-decoration: line-through;
+
+  /* Blocos */
+  --blockquote-border-color: var(--paperk-gilt-soft);
+  --blockquote-color: #4e3a27;
+  --blockquote-background-color: rgba(154, 115, 40, 0.05);
+  --hr-color: var(--paperk-gilt-soft);
+  --code-background: #ebdec1;
+  --code-normal: #4a3523;
+  --code-comment: #7f6a4a;
+  --code-function: #2f4a6b;
+  --code-important: #a86028;
+  --code-keyword: #8b2e24;
+  --code-operator: #6b543a;
+  --code-property: #66466c;
+  --code-punctuation: #8a7454;
+  --code-string: #546832;
+  --code-tag: #8b2e24;
+  --code-value: #9c5025;
+  --table-border-color: #cdb991;
+  --table-header-background: rgba(154, 115, 40, 0.10);
+  --table-header-color: var(--paperk-ink);
+
+  /* Estrutura da janela */
+  --titlebar-background: #e1d2b0;
+  --titlebar-background-focused: #e6d8b8;
+  --ribbon-background: #e1d2b0;
+  --tab-container-background: #e1d2b0;
+  --divider-color: #cdb991;
+  --scrollbar-bg: transparent;
+  --scrollbar-thumb-bg: rgba(122, 75, 42, 0.22);
+  --scrollbar-active-thumb-bg: rgba(122, 75, 42, 0.38);
+  --nav-item-background-active: rgba(138, 44, 35, 0.10);
+  --nav-item-color-active: var(--paperk-wax);
+
+  /* Grafo */
+  --graph-node: #7f6849;
+  --graph-node-unresolved: #b8a27a;
+  --graph-node-focused: var(--paperk-wax);
+  --graph-node-tag: var(--paperk-gilt);
+  --graph-node-attachment: #546832;
+  --graph-line: #cdb991;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   3. MODO ESCURO — "Couro & Vela"
+   Couro de encadernação, nogueira escura e luz de vela dourada.
+   ─────────────────────────────────────────────────────────────── */
+.theme-dark {
+  --paperk-paper: #1d1813;
+  --paperk-paper-deep: #17130f;
+  --paperk-ink: #e6dabf;
+  --paperk-wax: #c9604f;
+  --paperk-wax-soft: #d98a7a;
+  --paperk-gilt: #d4a95a;
+  --paperk-gilt-soft: #9c7d45;
+  --paperk-sepia: #d9b98a;
+  --paperk-indigo: #8fb0d4;
+  --paperk-vignette: rgba(0, 0, 0, 0.38);
+  --paperk-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.92 0 0 0 0 0.80 0 0 0 0 0.58 0.24 0 0 0 -0.09'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* Destaque em dourado de vela */
+  --accent-h: 38;
+  --accent-s: 58%;
+  --accent-l: 59%;
+
+  --color-base-00: #15110d;
+  --color-base-05: #1a1511;
+  --color-base-10: #1f1914;
+  --color-base-20: #262019;
+  --color-base-25: #2c251d;
+  --color-base-30: #352c22;
+  --color-base-35: #3e342a;
+  --color-base-40: #54483a;
+  --color-base-50: #7d6d55;
+  --color-base-60: #a39377;
+  --color-base-70: #b9a986;
+  --color-base-100: #ece2cc;
+
+  --color-red-rgb: 214, 110, 92;     --color-red: #d66e5c;
+  --color-orange-rgb: 222, 148, 90;  --color-orange: #de945a;
+  --color-yellow-rgb: 212, 169, 90;  --color-yellow: #d4a95a;
+  --color-green-rgb: 160, 180, 110;  --color-green: #a0b46e;
+  --color-cyan-rgb: 120, 180, 170;   --color-cyan: #78b4aa;
+  --color-blue-rgb: 135, 168, 208;   --color-blue: #87a8d0;
+  --color-purple-rgb: 182, 152, 202; --color-purple: #b698ca;
+  --color-pink-rgb: 210, 140, 160;   --color-pink: #d28ca0;
+
+  --background-primary: var(--paperk-paper);
+  --background-primary-alt: #231d17;
+  --background-secondary: #17130f;
+  --background-secondary-alt: #120f0c;
+  --background-modifier-border: #3a3026;
+  --background-modifier-border-hover: #54483a;
+  --background-modifier-border-focus: var(--paperk-gilt);
+  --background-modifier-hover: rgba(212, 169, 90, 0.07);
+  --background-modifier-active-hover: rgba(212, 169, 90, 0.13);
+  --background-modifier-form-field: #15110d;
+  --background-modifier-error: #b4503f;
+  --background-modifier-success: #7d9450;
+
+  --text-normal: var(--paperk-ink);
+  --text-muted: #b3a17f;
+  --text-faint: #85745b;
+  --text-on-accent: #1d1813;
+  --text-accent: var(--paperk-gilt);
+  --text-accent-hover: #e6c07a;
+  --text-selection: rgba(212, 169, 90, 0.22);
+  --text-highlight-bg: rgba(212, 169, 90, 0.26);
+  --text-error: #d66e5c;
+  --text-success: #a0b46e;
+  --text-warning: #de945a;
+
+  --bold-color: #f3ead6;
+  --italic-color: #eadbbd;
+
+  --h1-color: var(--paperk-gilt);
+  --h2-color: var(--paperk-ink);
+  --h3-color: var(--paperk-sepia);
+  --h4-color: var(--paperk-gilt);
+  --h5-color: var(--paperk-sepia);
+  --h6-color: var(--text-muted);
+  --inline-title-color: var(--paperk-gilt);
+
+  --link-color: var(--paperk-gilt);
+  --link-color-hover: #e6c07a;
+  --link-unresolved-color: var(--paperk-wax-soft);
+  --link-unresolved-opacity: 0.7;
+  --link-external-color: var(--paperk-indigo);
+  --link-external-color-hover: #b0c9e6;
+  --tag-color: #dd8f7f;
+  --tag-color-hover: #eaa898;
+  --tag-background: rgba(201, 96, 79, 0.10);
+  --tag-background-hover: rgba(201, 96, 79, 0.18);
+  --tag-border-color: rgba(201, 96, 79, 0.40);
+  --tag-border-color-hover: rgba(201, 96, 79, 0.62);
+
+  --interactive-normal: #2c251d;
+  --interactive-hover: #352c22;
+  --interactive-accent: var(--paperk-gilt);
+  --interactive-accent-hover: #e6c07a;
+  --checkbox-color: var(--paperk-gilt);
+  --checkbox-color-hover: #e6c07a;
+  --checkbox-border-color: #7d6d55;
+  --checkbox-border-color-hover: var(--paperk-gilt);
+  --checkbox-marker-color: #1d1813;
+  --checklist-done-color: var(--text-faint);
+  --checklist-done-decoration: line-through;
+
+  --blockquote-border-color: var(--paperk-gilt-soft);
+  --blockquote-color: #d2c3a3;
+  --blockquote-background-color: rgba(212, 169, 90, 0.04);
+  --hr-color: var(--paperk-gilt-soft);
+  --code-background: #16120e;
+  --code-normal: #e0d2b4;
+  --code-comment: #85745b;
+  --code-function: #8fb0d4;
+  --code-important: #de945a;
+  --code-keyword: #d98a7a;
+  --code-operator: #b3a17f;
+  --code-property: #b698ca;
+  --code-punctuation: #9a8a6e;
+  --code-string: #a0b46e;
+  --code-tag: #d98a7a;
+  --code-value: #e0a35a;
+  --table-border-color: #3e342a;
+  --table-header-background: rgba(212, 169, 90, 0.08);
+  --table-header-color: var(--paperk-ink);
+
+  --titlebar-background: #120f0c;
+  --titlebar-background-focused: #17130f;
+  --ribbon-background: #120f0c;
+  --tab-container-background: #120f0c;
+  --divider-color: #2c251d;
+  --scrollbar-bg: transparent;
+  --scrollbar-thumb-bg: rgba(212, 169, 90, 0.16);
+  --scrollbar-active-thumb-bg: rgba(212, 169, 90, 0.30);
+  --nav-item-background-active: rgba(212, 169, 90, 0.11);
+  --nav-item-color-active: var(--paperk-gilt);
+
+  --graph-node: #a39377;
+  --graph-node-unresolved: #54483a;
+  --graph-node-focused: var(--paperk-gilt);
+  --graph-node-tag: var(--paperk-wax);
+  --graph-node-attachment: #a0b46e;
+  --graph-line: #3e342a;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   4. TEXTURA DO PAPEL E VINHETA
+   Tudo é gerado localmente (SVG embutido); nada é baixado.
+   ─────────────────────────────────────────────────────────────── */
+body:not(.paperk-no-texture) .workspace-leaf-content[data-type="markdown"] .view-content,
+body:not(.paperk-no-texture) .workspace-leaf-content[data-type="canvas"] .view-content {
+  background-image: var(--paperk-grain);
+  background-repeat: repeat;
+}
+
+body:not(.paperk-no-vignette) .workspace-leaf-content[data-type="markdown"] .view-content {
+  box-shadow: inset 0 0 90px 10px var(--paperk-vignette);
+}
+
+/* Barra lateral com o tom de papel mais encorpado */
+body:not(.paperk-no-texture) .workspace-split.mod-left-split .workspace-leaf-content,
+body:not(.paperk-no-texture) .workspace-split.mod-right-split .workspace-leaf-content {
+  background-image: var(--paperk-grain);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   5. TÍTULOS
+   ─────────────────────────────────────────────────────────────── */
+.inline-title {
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+body.paperk-left-h1 .inline-title {
+  text-align: left;
+}
+
+/* H1 centralizado com florão (modo de leitura) */
+.markdown-rendered h1 {
+  text-align: center;
+  margin-top: 1.4em;
+  margin-bottom: 0.9em;
+}
+
+body.paperk-left-h1 .markdown-rendered h1 {
+  text-align: left;
+}
+
+body:not(.paperk-no-ornaments) .markdown-rendered h1::after {
+  content: "❦";
+  display: block;
+  margin-top: 0.15em;
+  font-family: var(--paperk-font-subtitle);
+  font-size: 0.55em;
+  font-variant: normal;
+  letter-spacing: 0;
+  line-height: 1;
+  color: var(--paperk-gilt);
+  opacity: 0.85;
+}
+
+/* Título do arquivo também recebe o florão */
+body:not(.paperk-no-ornaments) .markdown-reading-view .inline-title::after,
+body:not(.paperk-no-ornaments) .markdown-source-view .inline-title::after {
+  content: "❦";
+  display: block;
+  margin-top: 0.1em;
+  font-family: var(--paperk-font-subtitle);
+  font-size: 0.45em;
+  font-variant: normal;
+  letter-spacing: 0;
+  line-height: 1.2;
+  color: var(--paperk-gilt);
+  opacity: 0.8;
+}
+
+/* H2 com filete fino dourado */
+.markdown-rendered h2 {
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--paperk-gilt-soft);
+  margin-top: 1.6em;
+}
+
+.markdown-rendered h3 {
+  margin-top: 1.4em;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   6. LETRA CAPITULAR
+   Primeiro parágrafo após um H1, no modo de leitura.
+   ─────────────────────────────────────────────────────────────── */
+body:not(.paperk-no-drop-cap) .markdown-preview-section > .el-h1 + .el-p > p::first-letter {
+  float: left;
+  font-family: var(--paperk-font-heading);
+  font-size: 3.4em;
+  font-weight: 600;
+  line-height: 0.82;
+  padding: 0.08em 0.1em 0 0;
+  margin-right: 0.04em;
+  color: var(--h1-color);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   7. TEXTO, ÊNFASES E LINKS
+   ─────────────────────────────────────────────────────────────── */
+.markdown-rendered p,
+.markdown-source-view.mod-cm6 .cm-line {
+  font-variant-ligatures: common-ligatures;
+  font-kerning: normal;
+}
+
+.markdown-rendered strong,
+.cm-strong {
+  font-weight: 700;
+}
+
+/* Links com sublinhado discreto, como anotação a pena */
+.markdown-rendered a.internal-link,
+.markdown-rendered a.external-link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  transition: text-decoration-color 0.2s ease;
+}
+
+.markdown-rendered a.internal-link:hover,
+.markdown-rendered a.external-link:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Marca-texto com bordas suaves */
+.markdown-rendered mark,
+.cm-s-obsidian span.cm-highlight {
+  padding: 0.02em 0.18em;
+  border-radius: 2px;
+  color: inherit;
+}
+
+/* Etiquetas em versalete, como selos */
+.tag,
+.cm-hashtag {
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+}
+
+.markdown-rendered .tag {
+  font-size: 0.92em;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   8. CITAÇÕES
+   ─────────────────────────────────────────────────────────────── */
+.markdown-rendered blockquote {
+  position: relative;
+  font-family: var(--paperk-font-subtitle);
+  font-size: 1.1em;
+  background-color: var(--blockquote-background-color);
+  padding: 0.6em 1.2em 0.6em 1.4em;
+  border-radius: 0 3px 3px 0;
+}
+
+body:not(.paperk-no-ornaments) .markdown-rendered blockquote::before {
+  content: "“";
+  position: absolute;
+  top: -0.18em;
+  left: 0.12em;
+  font-family: var(--paperk-font-subtitle);
+  font-size: 3.2em;
+  font-style: normal;
+  line-height: 1;
+  color: var(--paperk-gilt);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.markdown-source-view.mod-cm6 .HyperMD-quote {
+  font-family: var(--paperk-font-subtitle);
+  font-size: 1.08em;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   9. LINHA HORIZONTAL ORNAMENTAL
+   ─────────────────────────────────────────────────────────────── */
+body:not(.paperk-no-ornaments) .markdown-rendered hr,
+body:not(.paperk-no-ornaments) .markdown-source-view.is-live-preview hr {
+  border: none;
+  height: 1.6em;
+  margin: 1.8em 0;
+  overflow: visible;
+  text-align: center;
+  background: none;
+}
+
+body:not(.paperk-no-ornaments) .markdown-rendered hr::after,
+body:not(.paperk-no-ornaments) .markdown-source-view.is-live-preview hr::after {
+  content: "❧   ✦   ☙";
+  white-space: pre;
+  font-family: var(--paperk-font-subtitle);
+  font-size: 1.15em;
+  letter-spacing: 0.15em;
+  line-height: 1.6em;
+  color: var(--paperk-gilt);
+  opacity: 0.85;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   10. CALLOUTS — fichas de papel com filete colorido
+   ─────────────────────────────────────────────────────────────── */
+.callout {
+  background-color: rgba(var(--callout-color), 0.07);
+  box-shadow: 0 1px 0 rgba(var(--callout-color), 0.10);
+}
+
+.callout-title {
+  font-family: var(--paperk-font-heading);
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+}
+
+.callout-title-inner {
+  font-weight: 600;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   11. CÓDIGO
+   ─────────────────────────────────────────────────────────────── */
+.markdown-rendered pre {
+  border: 1px solid var(--background-modifier-border);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.markdown-rendered code,
+.cm-s-obsidian span.cm-inline-code {
+  font-size: 0.9em;
+}
+
+.markdown-rendered :not(pre) > code,
+.cm-s-obsidian span.cm-inline-code:not(.cm-formatting) {
+  border: 1px solid var(--background-modifier-border);
+  padding: 0.05em 0.3em;
+}
+
+.cm-comment,
+.token.comment {
+  font-style: italic;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   12. TABELAS — livro-razão
+   ─────────────────────────────────────────────────────────────── */
+.markdown-rendered table {
+  border-collapse: collapse;
+}
+
+.markdown-rendered th {
+  font-family: var(--paperk-font-heading);
+  font-variant: small-caps;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  border-bottom: 2px double var(--paperk-gilt-soft);
+}
+
+.markdown-rendered tbody tr:nth-child(even) {
+  background-color: rgba(154, 115, 40, 0.045);
+}
+
+.theme-dark .markdown-rendered tbody tr:nth-child(even) {
+  background-color: rgba(212, 169, 90, 0.035);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   13. IMAGENS E INCORPORAÇÕES
+   ─────────────────────────────────────────────────────────────── */
+.markdown-rendered img:not(.emoji) {
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(60, 40, 20, 0.18), 0 6px 18px rgba(60, 40, 20, 0.10);
+}
+
+body.paperk-sepia-images .markdown-rendered img:not(.emoji) {
+  filter: sepia(0.35) saturate(0.9) contrast(0.97);
+}
+
+.markdown-embed,
+.file-embed {
+  background-color: rgba(154, 115, 40, 0.035);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   14. LISTAS E TAREFAS
+   ─────────────────────────────────────────────────────────────── */
+.markdown-rendered ul > li::marker,
+.markdown-rendered ol > li::marker {
+  color: var(--paperk-gilt);
+}
+
+.markdown-rendered ol > li::marker {
+  font-family: var(--paperk-font-subtitle);
+  font-weight: 600;
+}
+
+.list-bullet::after {
+  background-color: var(--paperk-gilt);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   15. INTERFACE — barra lateral, abas, painéis
+   ─────────────────────────────────────────────────────────────── */
+.nav-folder-title-content {
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+}
+
+.workspace-tab-header.is-active .workspace-tab-header-inner-title {
+  color: var(--text-accent);
+}
+
+.workspace-tab-header-inner-title {
+  font-family: var(--paperk-font-subtitle);
+  font-size: 1.02em;
+}
+
+body.paperk-sans-interface .workspace-tab-header-inner-title {
+  font-family: var(--font-interface);
+  font-size: inherit;
+}
+
+.status-bar {
+  font-family: var(--paperk-font-subtitle);
+  font-style: italic;
+}
+
+body.paperk-sans-interface .status-bar {
+  font-family: var(--font-interface);
+  font-style: normal;
+}
+
+.modal,
+.prompt,
+.menu {
+  border: 1px solid var(--background-modifier-border-hover);
+  box-shadow: 0 10px 34px rgba(40, 25, 10, 0.28);
+}
+
+.modal-title {
+  font-family: var(--paperk-font-heading);
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+}
+
+/* Botões de destaque com ar de lacre */
+button.mod-cta {
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   16. IMPRESSÃO / EXPORTAÇÃO EM PDF
+   ─────────────────────────────────────────────────────────────── */
+@media print {
+  .markdown-rendered h1::after,
+  .markdown-rendered blockquote::before {
+    color: #9a7328;
+  }
+}
