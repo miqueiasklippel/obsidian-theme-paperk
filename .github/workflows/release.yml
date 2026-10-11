@@ -1,11 +1,14 @@
 name: Publicar release
 
-# Cria a release no GitHub sempre que uma tag de versão (ex.: 1.0.0) é enviada.
-# A tag deve ser igual ao campo "version" do manifest.json, sem o prefixo "v".
+# A cada envio ao branch main, lê a versão do manifest.json e, se ainda não
+# existir uma release com esse número, cria a tag e a release (sem prefixo "v"),
+# anexando o manifest.json e o theme.css, como o Obsidian exige.
+# Para lançar uma nova versão, basta atualizar o campo "version" do manifest.json.
 on:
   push:
-    tags:
-      - "*"
+    branches:
+      - main
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -17,18 +20,20 @@ jobs:
       - name: Obter o código
         uses: actions/checkout@v4
 
-      - name: Conferir se a tag corresponde ao manifest.json
-        run: |
-          versao=$(jq -r .version manifest.json)
-          if [ "$versao" != "${GITHUB_REF_NAME}" ]; then
-            echo "A tag ${GITHUB_REF_NAME} difere da versão ${versao} do manifest.json."
-            exit 1
-          fi
+      - name: Ler a versão do manifest.json
+        id: versao
+        run: echo "valor=$(jq -r .version manifest.json)" >> "$GITHUB_OUTPUT"
 
-      - name: Criar a release com o manifest.json e o theme.css
+      - name: Criar a release, se ainda não existir
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSAO: ${{ steps.versao.outputs.valor }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" manifest.json theme.css \
-            --title "${GITHUB_REF_NAME}" \
-            --notes "PaperK ${GITHUB_REF_NAME} — tema de papel antigo e pergaminho para o Obsidian, com os modos claro (Pergaminho) e escuro (Couro & Vela)."
+          if gh release view "$VERSAO" > /dev/null 2>&1; then
+            echo "A release $VERSAO já existe; nada a fazer."
+            exit 0
+          fi
+          gh release create "$VERSAO" manifest.json theme.css \
+            --target "$GITHUB_SHA" \
+            --title "$VERSAO" \
+            --notes "PaperK $VERSAO — tema de papel antigo e pergaminho para o Obsidian, com os modos claro (Pergaminho) e escuro (Couro & Vela)."
